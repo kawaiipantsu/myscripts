@@ -16,3 +16,5 @@ bin-enabled/**
 # Ignore some testing things ...
 bin-available/myscript-testing**
 bin-available/myscript-benchmark**
+man-available/myscript-test**
+
