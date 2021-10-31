@@ -7,9 +7,12 @@
 # KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
 ###############################################################
 # Ignore any accumulated log files ...
-log/
+log/**
 
 # Make sure we start clean, even if i'm in use on the local system
-bin-enabled/
+bin-enabled/**
 !bin-enabled/myscript-conf
 
+# Ignore some testing things ...
+bin-available/myscript-testing**
+bin-available/myscript-benchmark**
