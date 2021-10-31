@@ -11,10 +11,10 @@ log/**
 
 # Make sure we start clean, even if i'm in use on the local system
 bin-enabled/**
+man-enabled/**
 !bin-enabled/myscript-conf
+!man-enabled/myscript-conf**
 
 # Ignore some testing things ...
 bin-available/myscript-testing**
 bin-available/myscript-benchmark**
-man-available/myscript-test**
-
