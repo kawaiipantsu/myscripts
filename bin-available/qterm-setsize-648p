@@ -1,4 +1,7 @@
 #!/bin/bash
+## Sanity check
+hash wmctrl 2>/dev/null || { echo >&2 "Missing command 'wmctrl', perhaps you need to install the package? Aborting."; exit 1; }
+
 wmctrl -x -r "qterminal.qterminal" -e 0,-1,-1,1152,648
 if hash qterm-setcenter 2>/dev/null; then
 	qterm-setcenter
