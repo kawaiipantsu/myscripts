@@ -1,0 +1,15 @@
+#  __  __       ____            _       _
+# |  \/  |_   _/ ___|  ___ _ __(_)_ __ | |_ ___  | Simple
+# | |\/| | | | \___ \ / __| '__| | '_ \| __/ __| | Linux
+# | |  | | |_| |___) | (__| |  | | |_) | |_\__ \ | Script
+# |_|  |_|\__, |____/ \___|_|  |_| .__/ \__|___/ | Management
+#         |___/                  |_|
+# KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
+###############################################################
+# Ignore any accumulated log files ...
+log/
+
+# Make sure we start clean, even if i'm in use on the local system
+bin-enabled/
+!bin-enabled/myscript-conf
+
