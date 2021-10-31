@@ -1,0 +1,21 @@
+#!/bin/bash
+####
+# Center all qterminal windows to the
+# middle of the monitor. It will use
+# the resolution of the currently
+# active monitor
+########################################
+## Quick reminder for centering ...
+## * (screen_size_width-win_size_x)/2
+## * (screen_size_height-win_size_y)/2
+SCREEN_WIDTH=`wmctrl -d|grep "*"|awk '{print $4}'|awk -F'x' '{print $1}'`
+SCREEN_HEIGHT=`wmctrl -d|grep "*"|awk '{print $4}'|awk -F'x' '{print $2}'`
+WIN_X=`wmctrl -l -G -x|grep "qterminal.qterminal"|awk '{print $5}'`
+WIN_Y=`wmctrl -l -G -x|grep "qterminal.qterminal"|awk '{print $6}'`
+
+# Do magic ....
+SET_X=$(((${SCREEN_WIDTH}-${WIN_X})/2))
+SET_Y=$(((${SCREEN_HEIGHT}-${WIN_Y})/2))
+
+# Center qTerminal
+wmctrl -x -r "qterminal.qterminal" -e 0,${SET_X},${SET_Y},-1,-1

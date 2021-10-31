@@ -1,0 +1,5 @@
+#!/bin/bash
+wmctrl -x -r "qterminal.qterminal" -e 0,-1,-1,1920,1080
+if hash qterm-setcenter 2>/dev/null; then
+        qterm-setcenter
+fi
