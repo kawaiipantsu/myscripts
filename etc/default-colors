@@ -1,0 +1,28 @@
+#!/bin/bash
+#####
+#  __  __       ____            _       _
+# |  \/  |_   _/ ___|  ___ _ __(_)_ __ | |_ ___  | Simple
+# | |\/| | | | \___ \ / __| '__| | '_ \| __/ __| | Linux
+# | |  | | |_| |___) | (__| |  | | |_) | |_\__ \ | Script
+# |_|  |_|\__, |____/ \___|_|  |_| .__/ \__|___/ | Management
+#         |___/                  |_|
+# KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
+###############################################################
+## MyScript Color Variables
+_RESTORE=$(echo -en '\033[0m')
+_RED=$(echo -en '\033[00;31m')
+_GREEN=$(echo -en '\033[00;32m')
+_YELLOW=$(echo -en '\033[00;33m')
+_BLUE=$(echo -en '\033[00;34m')
+_MAGENTA=$(echo -en '\033[00;35m')
+_PURPLE=$(echo -en '\033[00;35m')
+_CYAN=$(echo -en '\033[00;36m')
+_LIGHTGRAY=$(echo -en '\033[00;37m')
+_LRED=$(echo -en '\033[01;31m')
+_LGREEN=$(echo -en '\033[01;32m')
+_LYELLOW=$(echo -en '\033[01;33m')
+_LBLUE=$(echo -en '\033[01;34m')
+_LMAGENTA=$(echo -en '\033[01;35m')
+_LPURPLE=$(echo -en '\033[01;35m')
+_LCYAN=$(echo -en '\033[01;36m')
+_WHITE=$(echo -en '\033[01;37m')

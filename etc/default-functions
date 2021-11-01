@@ -1,0 +1,59 @@
+#!/bin/bash
+#####
+#  __  __       ____            _       _
+# |  \/  |_   _/ ___|  ___ _ __(_)_ __ | |_ ___  | Simple
+# | |\/| | | | \___ \ / __| '__| | '_ \| __/ __| | Linux
+# | |  | | |_| |___) | (__| |  | | |_) | |_\__ \ | Script
+# |_|  |_|\__, |____/ \___|_|  |_| .__/ \__|___/ | Management
+#         |___/                  |_|
+# KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
+###############################################################
+## Default functions for all myscripts
+## Source this file if you want for some handy functions
+
+## Simple need to be root check
+myscript_needroot () {
+  if [[ $EUID -ne 0 ]]; then
+    myscript_print_failure "${MYSCRIPT_NAME} need root privilege to run. Aborting." 
+    exit 1
+  fi
+}
+
+## Simple echo functions for any occasion
+## Inspired by github.com/mathieu-aubin
+if [ "${MYSCRIPT_PRINT_INCL_TIMESTAMP}" = true ]; then
+        INCL_TS=$(date "+%H:%M:%S %d-%m-%Y ")
+else
+        INCL_TS=""
+fi
+if [ "${MYSCRIPT_PRINT_USE_COLORS}" = true ]; then
+    function myscript_print_info() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;244m INFO ${MSG}"; }
+    function myscript_print_passed() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;226mPASSED${MSG}"; }
+    function myscript_print_success() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;34m GOOD ${MSG}"; }
+    function myscript_print_failure() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;196mFAILED${MSG}"; }
+    function myscript_print_warning() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;202m WARN ${MSG}"; }
+else
+    function myscript_print_info() { [[ ! -z "${1}" ]] && MSG="] ${1}\n" || MSG=""; echo -ne "${INCL_TS}[ INFO ${MSG}"; }
+    function myscript_print_passed() { [[ ! -z "${1}" ]] && MSG="] ${1}\n" || MSG=""; echo -ne "${INCL_TS}[PASSED${MSG}"; }
+    function myscript_print_success() { [[ ! -z "${1}" ]] && MSG="] ${1}\n" || MSG=""; echo -ne "${INCL_TS}[ GOOD ${MSG}"; }
+    function myscript_print_failure() { [[ ! -z "${1}" ]] && MSG="] ${1}\n" || MSG=""; echo -ne "${INCL_TS}[FAILED${MSG}"; }
+    function myscript_print_warning() { [[ ! -z "${1}" ]] && MSG="] ${1}\n" || MSG=""; echo -ne "${INCL_TS}[ WARN ${MSG}"; }
+fi
+
+## Bash colors (Grabbed from https://github.com/mathieu-aubin/c7repos/blob/master/functions/bash-colors)
+bash-colors() {
+	local SEQNUM=${1:-4}; [[ "$SEQNUM" -eq "0" ]] && SEQNUM=4;
+	tput rmam;
+	seq -ws ' ' 0 ${SEQNUM} 256 | \xargs -n1 bash -c \
+	'echo -ne "\e[1;48;5;${0}m \\\e[48;5;${0}m \e[0m"; \
+	echo -ne "\e[1;7;38;5;${0}m\\\e[7;38;5;${0}m \e[0m"; \
+	echo -ne " \e[1;38;5;${0}m\\\e[1;38;5;${0}m\e[0m"; \
+	echo -ne " \e[38;5;${0}m\\\e[38;5;${0}m\e[0m"; \
+	echo -ne " \e[2;38;5;${0}m\\\e[2;38;5;${0}m\e[0m"; \
+	echo -ne " \e[3;38;5;${0}m\\\e[3;38;5;${0}m\e[0m"; \
+	echo -ne " \e[4;38;5;${0}m\\\e[4;38;5;${0}m\e[0m"; \
+	echo -ne " \e[9;38;5;${0}m\\\e[9;38;5;${0}m\e[0m"; \
+	echo -ne " \e[4;9;38;5;${0}m\\\e[4;9;38;5;${0}m\e[0m"; \
+	echo -e " \e[1;3;4;9;38;5;${0}m\\\e[1;3;4;9;38;5;${0}m\e[0m"';
+	tput smam;
+}
