@@ -13,6 +13,7 @@ log/**
 bin-enabled/**
 man-enabled/**
 !bin-enabled/myscript-conf
+!bin-enabled/myscript-checkdeps
 !man-enabled/myscript-conf**
 
 # Ignore some testing things ...
