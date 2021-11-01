@@ -21,9 +21,9 @@ myscript_needcmd () {
 ## Check if cli command exits and be verbose
 myscript_checkcmd () {
     if hash "${1}" 2>/dev/null; then
-        myscript_print_passed "Command ${1} exists"
+        myscript_print_passed "$(whereis -b "${1}")"
     else
-        myscript_print_failure "Command ${1} not found" 
+        myscript_print_failure "Command '${1}' not found..." 
     fi
 }
 
@@ -45,12 +45,12 @@ myscript_checkroot () {
 
 ## Simple echo functions for any occasion
 ## Inspired by github.com/mathieu-aubin
-if [ "${MYSCRIPT_PRINT_INCL_TIMESTAMP}" = true ]; then
+if [ "${MYSCRIPT_USE_TIMESTAMP}" = true ]; then
         INCL_TS=$(date "+%H:%M:%S %d-%m-%Y ")
 else
         INCL_TS=""
 fi
-if [ "${MYSCRIPT_PRINT_USE_COLORS}" = true ]; then
+if [ "${MYSCRIPT_USE_COLORS}" = true ]; then
     function myscript_print_info() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;244m INFO ${MSG}"; }
     function myscript_print_passed() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;226mPASSED${MSG}"; }
     function myscript_print_success() { [[ ! -z "${1}" ]] && MSG="\\033[0;1m]\\033[0m ${1}\n" || MSG="\\033[0;1m]\\033[0m"; echo -ne "\\033[2;38;5;243m${INCL_TS}\\033[0;1m[\\033[0;1;38;5;34m GOOD ${MSG}"; }

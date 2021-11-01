@@ -1,4 +1,5 @@
 #!/bin/bash
+## %%CONF_DESCRIPTION=Set qTerminal size to 720p (16:9)
 ## Sanity check
 hash wmctrl 2>/dev/null || { echo >&2 "Missing command 'wmctrl', perhaps you need to install the package? Aborting."; exit 1; }
 

@@ -1,4 +1,5 @@
 #!/bin/bash
+## %%CONF_DESCRIPTION=Center qTerminal window on monitor
 ####
 # Center all qterminal windows to the
 # middle of the monitor. It will use

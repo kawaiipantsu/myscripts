@@ -8,6 +8,7 @@
 #         |___/                  |_|
 # KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
 ###############################################################
+## %%CONF_DESCRIPTION=Myscript script manger
 ## MyScript - Quick setup section :)
 MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
 source ${MYSCRIPT_PATH}/etc/default-settings
@@ -15,12 +16,65 @@ source ${MYSCRIPT_PATH}/etc/default-vars
 source ${MYSCRIPT_PATH}/etc/default-colors
 source ${MYSCRIPT_PATH}/etc/default-functions
 #############################################################
+## Text values
+BACKTITLE=" MyScripts - Simpel Script Management "
+TITLE="MyScripts checklist overview"
+OPTION_LINE1=" Select the script(s) you want to activate on your system..."
+OPTION_LINE2=" Dont forget to add the path"
+OPTION_LINE3=" - ${MYSCRIPT_PATH}/bin"
+
+## Lets do magic!
 let i=0 # define counting variable
-W=() # define working array
+let ii=0 # define counting variable
+A=() # define working array
+E=() # define working array
+COL=$(stty size|awk '{print $1-5}')
+ROW=$(stty size|awk '{print $2-6}')
+LST=$((${COL}-10))
+PAD=$((${ROW}-35))
 for filename in ${MYSCRIPT_AVAILABLE}/*; do
-    let i=$i+1
-    w+=($i "$(basename "$filename")")
+    SCRIPT=$(basename "$filename")
+    if ! [[ "${SCRIPT}" =~ ^(myscript-conf|myscript-checkdeps)$ ]]; then
+        let i=$i+1
+        SCRIPT_ENABLED="${MYSCRIPT_ENABLED}/${SCRIPT}"
+        if [[ -f "${SCRIPT_ENABLED}" ]]; then
+            CHECK="on"
+            let ii=$ii+1
+            E+=(\"${SCRIPT}\")
+        else
+            CHECK="off"
+        fi
+        # Get the DESCRIPTION text if there
+        DESC=$(cat "$filename"|grep "%%CONF_DESCRIPTION"|awk -F'%%CONF_DESCRIPTION=' '{print $2}')
+        if [[ ${DESC} == "" ]] ; then
+            DESC="No description added"
+        fi
+
+        #W+=("$(printf "%-${PAD}s" $(basename "${SCRIPT}"))" "${DESC}" "${CHECK}")
+        W+=("${SCRIPT}" "$(printf "%-${PAD}s" " :: ${DESC}")" "${CHECK}")
+    fi
 done
-FILE=$(dialog --title "List file of directory /home" --menu "Chose one" 24 80 17 "${W[@]}" 3>&2 2>&1 1>&3) # show dialog and store output
-clear
-echo "FILE: $FILE"
+
+ACTIVATE=$(whiptail --backtitle "${BACKTITLE}" --title "${TITLE}" --checklist "\n${OPTION_LINE1}\n${OPTION_LINE2}\n${OPTION_LINE3}" ${COL} ${ROW} ${LST} "${W[@]}" 3>&2 2>&1 1>&3)
+if [[ $? == 0 ]] ; then
+    scripts=( ${ACTIVATE} )
+    A1=${E[@]}
+    A2=${scripts[@]}
+    if [ "${A1}" == "${A2}" ]; then
+        # Noew also catching no changes needed ...
+        myscript_print_info "No changes made, nothing to do"
+        myscript_print_info "${#E[@]} script(s) unchanged"
+    else
+        myscript_print_info "${#E[@]} script(s) was active, removing"
+        myscript_print_info "${#scripts[@]} script(s) need activation"
+        for s in "${scripts[@]}"; do
+            # ACTIVATE THINGS HERE !!
+            # TRY TO CATCH PROBLEMS AND PRINT IT ....
+            # FOR NOW JUST SIMULATE WHILE TESTING ALL GOOD ...
+            myscript_print_success "Activating ${s}"
+        done
+    fi
+else
+    myscript_print_warning "Aborted, no changes was made"
+fi
+myscript_print_info "All done"

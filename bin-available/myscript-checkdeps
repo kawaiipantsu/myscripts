@@ -18,6 +18,40 @@ source ${MYSCRIPT_PATH}/etc/default-functions
 
 ## Simple checking of dependencies
 ## This is only cool if you remember to update this script!
-echo ${_WHITE}==[${_RESTORE} MyScript Check Dependencies ${_WHITE}]===
+
+TITLE="MyScript - Check dependencies"
+LINE1="In case any of the dependencies fails, try to"
+LINE2="install the missing packages and rerun to check."
+
+if [ "${MYSCRIPT_USE_COLORS}" = true ]; then
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m ${TITLE}\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m ----\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m  ${LINE1}\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m  ${LINE2}\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m ----\n"
+    echo -ne "\\033[2;38;5;243m%%\\033[0;1m\\033[0m\n"
+else
+    echo -ne "%%\n"
+    echo -ne "%% ${TITLE}\n"
+    echo -ne "%%\n"
+    echo -ne "%% ----\n"
+    echo -ne "%%  ${LINE1}\n"
+    echo -ne "%%  ${LINE2}\n"
+    echo -ne "%% ----\n"
+    echo -ne "%%\n"
+fi
+
+myscript_print_info "=== Checking for Shell environments"
+myscript_checkcmd sh
+myscript_checkcmd bash
+myscript_checkcmd zsh
+echo -ne "\n"
+myscript_print_info "=== Checking for System commands"
 myscript_checkcmd dialog
+myscript_checkcmd whiptail
+echo -ne "\n"
+myscript_print_info "=== Checking for X Window manager commands"
 myscript_checkcmd wmctrl
+echo -ne "\n"

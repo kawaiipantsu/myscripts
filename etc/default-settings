@@ -12,6 +12,6 @@
 MYSCRIPT_SYSLOG=false
 MYSCRIPT_LOG=false
 
-## MyScript Print functions settings
-MYSCRIPT_PRINT_USE_COLORS=true
-MYSCRIPT_PRINT_INCL_TIMESTAMP=true
+## MyScript vanity settings
+MYSCRIPT_USE_COLORS=true
+MYSCRIPT_USE_TIMESTAMP=true
