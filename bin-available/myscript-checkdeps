@@ -15,12 +15,9 @@ source ${MYSCRIPT_PATH}/etc/default-vars
 source ${MYSCRIPT_PATH}/etc/default-colors
 source ${MYSCRIPT_PATH}/etc/default-functions
 #############################################################
-let i=0 # define counting variable
-W=() # define working array
-for filename in ${MYSCRIPT_AVAILABLE}/*; do
-    let i=$i+1
-    w+=($i "$(basename "$filename")")
-done
-FILE=$(dialog --title "List file of directory /home" --menu "Chose one" 24 80 17 "${W[@]}" 3>&2 2>&1 1>&3) # show dialog and store output
-clear
-echo "FILE: $FILE"
+
+## Simple checking of dependencies
+## This is only cool if you remember to update this script!
+echo ${_WHITE}==[${_RESTORE} MyScript Check Dependencies ${_WHITE}]===
+myscript_checkcmd dialog
+myscript_checkcmd wmctrl
