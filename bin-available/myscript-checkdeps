@@ -8,13 +8,15 @@
 #         |___/                  |_|
 # KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
 ###############################################################
-## MyScript - Quick setup section :)
-MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
-source ${MYSCRIPT_PATH}/etc/default-settings
-source ${MYSCRIPT_PATH}/etc/default-vars
-source ${MYSCRIPT_PATH}/etc/default-colors
-source ${MYSCRIPT_PATH}/etc/default-functions
-#############################################################
+## MYSCRIPT - SCRIPT DEFAULTS :)
+##################################################################
+## %%MYSCRIPTS_DESCRIPTION=MyScripts Check dependencies
+## %%MYSCRIPTS_GROUP=MyScripts
+export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
+source ${MYSCRIPT_PATH}/etc/script-defaults
+##################################################################
+
+## BEGIN SCRIPT
 
 ## Simple checking of dependencies
 ## This is only cool if you remember to update this script!

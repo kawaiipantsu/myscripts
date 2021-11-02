@@ -1,5 +1,23 @@
 #!/bin/bash
-## %%CONF_DESCRIPTION=Set qTerminal size to 720p (16:9)
+#####
+#  __  __       ____            _       _
+# |  \/  |_   _/ ___|  ___ _ __(_)_ __ | |_ ___  | Simple
+# | |\/| | | | \___ \ / __| '__| | '_ \| __/ __| | Linux
+# | |  | | |_| |___) | (__| |  | | |_) | |_\__ \ | Script
+# |_|  |_|\__, |____/ \___|_|  |_| .__/ \__|___/ | Management
+#         |___/                  |_|
+# KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
+###############################################################
+## MYSCRIPT - SCRIPT DEFAULTS :)
+##################################################################
+## %%MYSCRIPTS_DESCRIPTION=Resize qterminal to 720p 16:9
+## %%MYSCRIPTS_GROUP=Streaming
+## %%MYSCRIPTS_GROUP=Terminal
+export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
+source ${MYSCRIPT_PATH}/etc/script-defaults
+##################################################################
+
+## BEGIN SCRIPT
 ## Sanity check
 hash wmctrl 2>/dev/null || { echo >&2 "Missing command 'wmctrl', perhaps you need to install the package? Aborting."; exit 1; }
 

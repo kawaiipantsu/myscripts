@@ -8,14 +8,15 @@
 #         |___/                  |_|
 # KawaiiPantsu - https://github.com/kawaiipantsu/myscripts
 ###############################################################
-## %%CONF_DESCRIPTION=Myscript script manger
-## MyScript - Quick setup section :)
-MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
-source ${MYSCRIPT_PATH}/etc/default-settings
-source ${MYSCRIPT_PATH}/etc/default-vars
-source ${MYSCRIPT_PATH}/etc/default-colors
-source ${MYSCRIPT_PATH}/etc/default-functions
-#############################################################
+## MYSCRIPT - SCRIPT DEFAULTS :)
+##################################################################
+## %%MYSCRIPTS_DESCRIPTION=MyScripts Manager Config
+## %%MYSCRIPTS_GROUP=MyScripts
+export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
+source ${MYSCRIPT_PATH}/etc/script-defaults
+##################################################################
+
+## BEGIN SCRIPT
 ## Text values
 BACKTITLE=" MyScripts - Simpel Script Management "
 TITLE="MyScripts checklist overview"
@@ -23,18 +24,45 @@ OPTION_LINE1=" Select the script(s) you want to activate on your system..."
 OPTION_LINE2=" Dont forget to add the path"
 OPTION_LINE3=" - ${MYSCRIPT_PATH}/bin"
 
+## Help function
+help_usage() { echo -e "Usage: $(basename $0) [OPTION...]\n\n   -s           Show individual scripts (default)\n   -g           Show script groups instead\n   -h           Show this help list\n" 1>&2; exit 0; }
+help_syntax_error1() { echo -e "$(basename $0): invalid option -- '${1}'\nTry '$(basename $0) -h' for more information." 1>&2; exit 1; }
+help_syntax_error2() { echo "Error: $0 (2)" 1>&2; exit 1; }
+
+## Find out if we show Groupings or individual scripts
+SHOW="SCRIPTS"
+while getopts :gh flag
+do
+    case "${flag}" in
+        s) SHOW="SCRIPTS";;
+        g) SHOW="GROUPS";;
+        h) help_usage;;
+        \?) help_syntax_error1 "${OPTARG}";;
+        :) help_syntax_error2;;
+        *) SHOW="SCRIPTS";;
+    esac
+done
+shift $((OPTIND -1))
+
+if [[ "${SHOW}" == "GROUPS" ]] ; then
+    OPTION_LINE1=" Select the group(s) you want to activate, selecting groups resets all previous activated scripts"
+fi
+
 ## Lets do magic!
 let i=0 # define counting variable
 let ii=0 # define counting variable
+let Ungrouped_count=0
 A=() # define working array
 E=() # define working array
+G=() # define working array
+C=()
 COL=$(stty size|awk '{print $1-5}')
 ROW=$(stty size|awk '{print $2-6}')
-LST=$((${COL}-10))
+LST=$((${COL}-11))
 PAD=$((${ROW}-35))
 for filename in ${MYSCRIPT_AVAILABLE}/*; do
     SCRIPT=$(basename "$filename")
-    if ! [[ "${SCRIPT}" =~ ^(myscript-conf|myscript-checkdeps)$ ]]; then
+    if ! [[ "${SCRIPT}" =~ ^(myscript-conf|myscript-checkdeps|myscript-man)$ ]]; then
         let i=$i+1
         SCRIPT_ENABLED="${MYSCRIPT_ENABLED}/${SCRIPT}"
         if [[ -f "${SCRIPT_ENABLED}" ]]; then
@@ -45,7 +73,26 @@ for filename in ${MYSCRIPT_AVAILABLE}/*; do
             CHECK="off"
         fi
         # Get the DESCRIPTION text if there
-        DESC=$(cat "$filename"|grep "%%CONF_DESCRIPTION"|awk -F'%%CONF_DESCRIPTION=' '{print $2}')
+        DESC=$(cat "$filename"|grep "%%MYSCRIPTS_DESCRIPTION"|awk -F'%%MYSCRIPTS_DESCRIPTION=' '{print $2}')
+        _GROUPS=$(cat "$filename"|grep "%%MYSCRIPTS_GROUP"|awk -F'%%MYSCRIPTS_GROUP=' '{printf $2" "}')
+        #myscript_print_info "Groups: ${_GROUPS}"
+        if [[ ${_GROUPS} == "" ]] ; then
+            #myscript_print_info "No group ..."
+            G+=( Ungrouped )
+            C+=( "${SCRIPT}%%\"Ungrouped\"")
+            [ -z "${Ungrouped_count}" ] && let Ungrouped_count=0
+            let Ungrouped_count=$Ungrouped_count+1    
+        else
+            for s in ${_GROUPS}; do
+                #myscript_print_info "Found group: ${s}"
+                G+=(${s})
+                C+=( "${SCRIPT}%%\"${s}\"")
+                gnc="${s}_count"
+                [ -z ${gnc} ] && let ${gnc}=0
+                let ${gnc}=${!gnc}+1
+            done
+        fi
+
         if [[ ${DESC} == "" ]] ; then
             DESC="No description added"
         fi
@@ -55,6 +102,18 @@ for filename in ${MYSCRIPT_AVAILABLE}/*; do
     fi
 done
 
+# Small hack to sort array to only contain uniqes :)
+TMP=" " read -r -a G <<< "$(echo "${G[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')"
+if [[ "${SHOW}" == "GROUPS" ]] ; then
+    W=()
+    E=()
+    PAD=$((${ROW}-25))
+    for s in "${G[@]}"; do
+        gcount="${s}_count"
+        W+=("${s}" "$(printf "%-${PAD}s" " :: There are ${!gcount} script(s) in this group")" "Off")
+    done
+fi
+
 ACTIVATE=$(whiptail --backtitle "${BACKTITLE}" --title "${TITLE}" --checklist "\n${OPTION_LINE1}\n${OPTION_LINE2}\n${OPTION_LINE3}" ${COL} ${ROW} ${LST} "${W[@]}" 3>&2 2>&1 1>&3)
 if [[ $? == 0 ]] ; then
     scripts=( ${ACTIVATE} )
@@ -63,15 +122,36 @@ if [[ $? == 0 ]] ; then
     if [ "${A1}" == "${A2}" ]; then
         # Noew also catching no changes needed ...
         myscript_print_info "No changes made, nothing to do"
-        myscript_print_info "${#E[@]} script(s) unchanged"
+        if [[ "${SHOW}" == "GROUPS" ]] ; then
+            myscript_print_info "${#E[@]} groups(s) unchanged"
+        else
+            myscript_print_info "${#E[@]} script(s) unchanged"
+        fi
     else
-        myscript_print_info "${#E[@]} script(s) was active, removing"
-        myscript_print_info "${#scripts[@]} script(s) need activation"
+        if [[ "${SHOW}" == "GROUPS" ]] ; then
+            myscript_print_info "${#E[@]} group(s) was active, removing"
+            myscript_print_info "${#scripts[@]} groups(s) need activation"
+        else
+            myscript_print_info "${#E[@]} script(s) was active, removing"
+            myscript_print_info "${#scripts[@]} script(s) need activation"
+        fi
+        
         for s in "${scripts[@]}"; do
             # ACTIVATE THINGS HERE !!
             # TRY TO CATCH PROBLEMS AND PRINT IT ....
             # FOR NOW JUST SIMULATE WHILE TESTING ALL GOOD ...
-            myscript_print_success "Activating ${s}"
+            if [[ "${SHOW}" == "GROUPS" ]] ; then
+                myscript_print_info "Activating group ${s}"
+                for ss in "${C[@]}"; do
+                    if [[ "${ss}" == *"%%${s}" ]]; then
+                        SCRIPT=$(echo -ne ${ss} | awk -F'%%' '{print $1}')
+                        myscript_print_success " - ${SCRIPT}"
+                    fi
+                done
+            else
+                SCRIPT=${s}
+                myscript_print_success "Activating script ${SCRIPT}"
+            fi
         done
     fi
 else

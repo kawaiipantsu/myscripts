@@ -14,7 +14,12 @@ bin-enabled/**
 man-enabled/**
 !bin-enabled/myscript-conf
 !bin-enabled/myscript-checkdeps
+!bin-enabled/myscript-man
+!bin-enabled/myscripts-manager
 !man-enabled/myscript-conf**
+!man-enabled/myscripts-manager**
+!man-enabled/myscript-checkdeps**
+!man-enabled/myscript-man**
 
 # Ignore some testing things ...
 bin-available/myscript-testing**

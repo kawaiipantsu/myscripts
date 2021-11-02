@@ -10,18 +10,10 @@
 ###############################################################
 ## MYSCRIPT - SCRIPT DEFAULTS :)
 ##################################################################
-## %%MYSCRIPTS_DESCRIPTION=Resize qterminal to 900p 16:9
-## %%MYSCRIPTS_GROUP=Streaming
-## %%MYSCRIPTS_GROUP=Terminal
+## %%MYSCRIPTS_DESCRIPTION=Myscripts Man Page Wrapper
+## %%MYSCRIPTS_GROUP=MyScripts
 export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
 source ${MYSCRIPT_PATH}/etc/script-defaults
 ##################################################################
 
 ## BEGIN SCRIPT
-## Sanity check
-hash wmctrl 2>/dev/null || { echo >&2 "Missing command 'wmctrl', perhaps you need to install the package? Aborting."; exit 1; }
-
-wmctrl -x -r "qterminal.qterminal" -e 0,-1,-1,1600,900
-if hash qterm-setcenter 2>/dev/null; then
-        qterm-setcenter
-fi
