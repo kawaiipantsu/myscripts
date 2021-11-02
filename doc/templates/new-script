@@ -10,8 +10,11 @@
 ###############################################################
 ## MYSCRIPT - SCRIPT DEFAULTS :)
 ##################################################################
-## %%MANAGER_DESCRIPTION=Short Script Description
-## %%MANAGER_GROUP=MyScripts-Internal
+## (Description string needs to be short for best look)
+## (GROUP name needs to be [A-Za-z0-9] only)
+## (There can be multiple GROUP lines)
+## %%MYSCRIPTS_DESCRIPTION=Short Script Description
+## %%MYSCRIPTS_GROUP=MyScripts
 export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
 source ${MYSCRIPT_PATH}/etc/script-defaults
 ##################################################################
