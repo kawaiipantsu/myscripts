@@ -10,7 +10,7 @@
 ###############################################################
 ## MYSCRIPT - SCRIPT DEFAULTS :)
 ##################################################################
-## %%MYSCRIPTS_DESCRIPTION=Myscripts Man Page Wrapper
+## %%MYSCRIPTS_DESCRIPTION=MyScripts Man Page Wrapper
 ## %%MYSCRIPTS_GROUP=MyScripts
 export MYSCRIPT_PATH=$(dirname $(dirname "$(realpath -s "$0")"))
 source ${MYSCRIPT_PATH}/etc/script-defaults
